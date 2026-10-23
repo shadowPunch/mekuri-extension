@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mekuri PDF Reader</title>
+<link rel="icon" href="icons/48.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Shippori+Mincho:wght@600;800&display=swap">
+<link rel="stylesheet" href="reader.css">
+</head>
+<body>
+
+<div class="app bar-on" id="app" data-tool="read">
+  <header class="bar" id="bar">
+    <input class="sr" type="file" id="file" accept="application/pdf,.pdf">
+    <label class="btn primary" for="file">Open PDF</label>
+    <div class="doc"><span class="mark">めくり</span><span id="docName">Quick guide (sample booklet)</span></div>
+    <div class="grp">
+      <label class="sr" for="pageNo">Page number</label>
+      <input class="txt" id="pageNo" inputmode="numeric" autocomplete="off" value="1"><span id="pageTotal">of 8</span>
+    </div>
+    <div class="grp">
+      <div class="seg" role="group" aria-label="Zoom">
+        <button type="button" id="zOut" title="Zoom out (Ctrl and wheel)">−</button>
+        <button type="button" id="zIn" title="Zoom in (Ctrl and wheel)">+</button>
+        <button type="button" id="zPage" aria-pressed="true">Fit page</button>
+        <button type="button" id="zWidth" aria-pressed="false">Fit width</button>
+      </div>
+      <div class="seg" role="group" aria-label="View">
+        <button type="button" id="vBook" aria-pressed="true" title="Pages turn like a book">Book</button>
+        <button type="button" id="vScroll" aria-pressed="false" title="Ordinary continuous vertical scrolling">Scroll</button>
+      </div>
+      <div class="seg" role="group" aria-label="Page layout">
+        <button type="button" id="lay1" aria-pressed="false">1 page</button>
+        <button type="button" id="lay2" aria-pressed="true">2 pages</button>
+      </div>
+      <button type="button" id="rot" title="Rotate pages a quarter turn (R)">Rotate</button>
+    </div>
+    <div class="grp">
+      <div class="seg" role="group" aria-label="Tool">
+        <button type="button" id="tRead" aria-pressed="true" title="Back to selecting text and turning pages (Esc)">Select</button>
+        <button type="button" id="tHl" aria-pressed="false" title="Highlight the selected text, or switch on to highlight as you select">Highlight</button>
+        <button type="button" id="tDraw" aria-pressed="false" title="Draw on the page">Draw</button>
+        <button type="button" id="tErase" aria-pressed="false" title="Click a highlight or drawing to remove it">Erase</button>
+      </div>
+      <span class="grp" id="swatches" role="group" aria-label="Colour"></span>
+      <button type="button" id="undo" title="Undo the last mark (Ctrl+Z)">Undo</button>
+    </div>
+    <div class="grp">
+      <button type="button" id="findBtn" title="Find in document (Ctrl+F)">Find</button>
+      <button type="button" id="print" title="Print (Ctrl+P)">Print</button>
+      <button type="button" id="save" title="Save a copy with your marks (Ctrl+S)">Save as</button>
+    </div>
+    <div class="grp">
+      <label class="knob" title="How fast a page turns when you click, or settles when you let go">Speed
+        <input type="range" id="speed" min="0" max="100" step="1" value="50"></label>
+      <label class="knob" title="Low: the page stays flat against the book and folds over tightly. High: it lifts away in a wide, loose bend.">Softness
+        <input type="range" id="soft" min="0" max="100" step="1" value="80"></label>
+      <button type="button" id="rtl" aria-pressed="false">Right to left</button>
+      <button type="button" id="fs">Full screen</button>
+      <button type="button" id="defBtn" hidden title="When on, every PDF you open in this browser opens here instead of the built-in viewer"></button>
+    </div>
+    <div class="find" id="findRow" hidden>
+      <label class="sr" for="q">Find in document</label>
+      <input class="txt" id="q" type="search" placeholder="Find in document" autocomplete="off">
+      <span id="qCount"></span>
+      <button type="button" id="qPrev" title="Previous match (Shift+Enter)">Previous</button>
+      <button type="button" id="qNext" title="Next match (Enter)">Next</button>
+      <button type="button" id="qClose">Close</button>
+    </div>
+  </header>
+  <div class="grip" aria-hidden="true"></div>
+  <main class="stage" id="stage">
+    <div id="shadow"></div>
+    <canvas id="gl" aria-label="Book. Drag a page to turn it, or click a page."></canvas>
+    <div class="pageLayer" id="layA" hidden><div class="findLayer"></div><canvas class="ink"></canvas><div class="textLayer"></div></div>
+    <div class="pageLayer" id="layB" hidden><div class="findLayer"></div><canvas class="ink"></canvas><div class="textLayer"></div></div>
+ <div id="scroller" hidden></div>
+    <div id="vbar" role="scrollbar" aria-label="Page position" aria-orientation="vertical"><div id="thumb"></div><div id="bubble" hidden></div></div>
+    <div id="msg" role="status" hidden></div>
+    <div id="drop" hidden>Drop the PDF to open it</div>
+  </main>
+</div>
+<div id="printRoot"></div>
+
+<script src="pdf.min.js"></script>
+<script src="pdf-lib.min.js"></script>
+<script src="reader.js"></script>
+</body>
+</html>

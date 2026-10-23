@@ -1,0 +1,100 @@
+body{margin:0}
+img{max-width:100%}
+
+/* Layout: the book fills the whole window. The toolbar slides in from the top edge on hover; a thin page scrollbar sits on the right edge. */
+:root{
+  --desk:#D5DAE2; --desk-edge:#BEC5D0; --panel:#F2F4F7; --fg:#1A2033; --muted:#566079;
+  --line:#C2C8D4; --accent:#2B4BA0; --accent-fg:#FFFFFF; --shadow:rgba(22,30,52,.38);
+  --display:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
+  --ui:"Instrument Sans","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --desk:#151922; --desk-edge:#0D1016; --panel:#1C212C; --fg:#E8EAF1; --muted:#9BA4B8;
+    --line:#313848; --accent:#9DB2F7; --accent-fg:#11141C; --shadow:rgba(0,0,0,.6); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --desk:#151922; --desk-edge:#0D1016; --panel:#1C212C; --fg:#E8EAF1; --muted:#9BA4B8;
+  --line:#313848; --accent:#9DB2F7; --accent-fg:#11141C; --shadow:rgba(0,0,0,.6); color-scheme:dark;
+}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--desk);color:var(--fg);font-family:var(--ui);font-size:13px;line-height:1.4}
+*{box-sizing:border-box}
+.app{position:relative;height:100%;overflow:hidden;background:var(--desk);user-select:none;-webkit-user-select:none}
+.bar{position:absolute;z-index:20;top:0;left:0;right:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;
+  padding-block:7px;padding-inline:16px;background:var(--panel);border-bottom:1px solid var(--line);
+  box-shadow:0 6px 18px -8px var(--shadow);transform:translateY(-102%);transition:transform .18s ease}
+.app.bar-on .bar,.bar:focus-within{transform:none}
+@media (prefers-reduced-motion: reduce){ .bar{transition:none} }
+.grip{position:absolute;z-index:19;top:3px;left:50%;width:44px;height:4px;margin-left:-22px;border-radius:2px;background:var(--muted);opacity:.35;pointer-events:none}
+.grp{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.doc{display:flex;align-items:baseline;gap:8px;min-width:0;flex:1 1 120px}
+.mark{font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:.04em;white-space:nowrap}
+#docName{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+button,.btn{font:500 12.5px/1 var(--ui);color:var(--fg);background:transparent;border:1px solid var(--line);
+  border-radius:6px;padding:7px 9px;cursor:pointer;white-space:nowrap}
+button:hover,.btn:hover{border-color:var(--muted)}
+button:disabled{opacity:.4;cursor:default}
+button[aria-pressed="true"]{background:var(--fg);color:var(--panel);border-color:var(--fg)}
+.btn.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent);font-weight:600}
+button:focus-visible,.sr:focus-visible + .btn,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.seg{display:flex}
+.seg button{border-radius:0;margin-left:-1px}
+.seg button:first-child{border-radius:6px 0 0 6px;margin-left:0}
+.seg button:last-child{border-radius:0 6px 6px 0}
+.knob{display:flex;align-items:center;gap:5px;color:var(--muted);font-weight:500}
+.knob input{width:72px;accent-color:var(--accent)}
+.txt{font:500 12.5px/1 var(--ui);color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+#pageNo{width:46px;text-align:right;font-variant-numeric:tabular-nums}
+#pageTotal,#qCount{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.sw{width:20px;height:20px;padding:0;border-radius:50%;border:2px solid var(--panel);outline:1px solid var(--line)}
+.sw[aria-pressed="true"]{outline:2px solid var(--fg);background-clip:padding-box}
+.find{flex:1 1 100%;display:flex;align-items:center;gap:6px}
+#q{flex:0 1 260px;min-width:0}
+.stage{position:absolute;inset:0;overflow:hidden;
+  background:radial-gradient(120% 90% at 50% 40%,var(--desk) 35%,var(--desk-edge) 100%)}
+#shadow{position:absolute;border-radius:2px;box-shadow:0 22px 44px -14px var(--shadow),0 2px 8px var(--shadow)}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:default}
+#gl.dragging{cursor:grabbing!important}
+.app[data-tool="draw"] #gl,.app[data-tool="erase"] #gl{cursor:crosshair}
+.pageLayer{position:absolute;overflow:hidden;pointer-events:none}
+.ink{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+#scroller{position:absolute;inset:0;overflow:auto;padding-block:4px}
+.spage{position:relative;margin:8px auto;background:#fff;overflow:hidden;box-shadow:0 2px 10px -2px var(--shadow);cursor:text}
+.spage .pg{position:absolute;left:0;top:0;width:100%;height:100%}
+.app[data-view="scroll"] #gl,.app[data-view="scroll"] #shadow,.app[data-view="scroll"] #vbar,.app[data-view="scroll"] .pageLayer{display:none!important}
+.app[data-tool="draw"] #scroller,.app[data-tool="erase"] #scroller{touch-action:none}
+.app[data-tool="draw"] .spage,.app[data-tool="erase"] .spage{cursor:crosshair}
+.findLayer{position:absolute;inset:0;mix-blend-mode:multiply}
+.findLayer i{position:absolute;background:#FFD23F;border-radius:2px}
+.findLayer i.on{background:#FF8A3D}
+/* pdf.js text layer: invisible text laid exactly over the page so it can be selected and copied */
+.textLayer{position:absolute;left:0;top:0;font-family:sans-serif;text-align:initial;overflow:hidden;line-height:1;-webkit-text-size-adjust:none;text-size-adjust:none;
+  forced-color-adjust:none;transform-origin:0 0;user-select:text;-webkit-user-select:text}
+.textLayer span,.textLayer br{color:transparent;position:absolute;white-space:pre;cursor:text;transform-origin:0% 0%;pointer-events:auto}
+.textLayer span.markedContent{top:0;height:0}
+.textLayer ::selection{background:rgba(40,110,255,.32)}
+.textLayer br::selection{background:transparent}
+.textLayer[data-main-rotation="90"]{transform:rotate(90deg) translateY(-100%)}
+.textLayer[data-main-rotation="180"]{transform:rotate(180deg) translate(-100%,-100%)}
+.textLayer[data-main-rotation="270"]{transform:rotate(270deg) translateX(-100%)}
+.app[data-tool="draw"] .textLayer span,.app[data-tool="erase"] .textLayer span{pointer-events:none}
+#vbar{position:absolute;z-index:10;top:0;bottom:0;right:0;width:18px;cursor:pointer;touch-action:none}
+#thumb{position:absolute;right:4px;top:0;width:6px;border-radius:5px;background:var(--muted);opacity:.45;transition:width .12s,opacity .12s}
+#vbar:hover #thumb,#vbar.drag #thumb{width:10px;opacity:.9}
+#bubble{position:absolute;right:22px;top:0;background:var(--fg);color:var(--panel);padding:5px 9px;border-radius:6px;
+  font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;pointer-events:none}
+#msg{position:absolute;z-index:15;left:50%;bottom:20px;transform:translateX(-50%);max-width:calc(100% - 32px);
+  background:var(--fg);color:var(--panel);padding:10px 14px;border-radius:6px;font-weight:500;text-align:center}
+#drop{position:absolute;z-index:16;inset:12px;border:2px dashed var(--accent);border-radius:10px;display:grid;place-items:center;
+  background:color-mix(in srgb,var(--panel) 86%,transparent);font:600 20px/1.3 var(--display);text-align:center;padding:16px;pointer-events:none}
+#printRoot{display:none}
+@media print{
+  html,body{height:auto;background:#fff}
+  .app{display:none!important}
+  #printRoot{display:block}
+  #printRoot img{display:block;width:100%;break-after:page;break-inside:avoid}
+}
