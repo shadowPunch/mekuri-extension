@@ -2,6 +2,18 @@
 
 A Chromium browser extension (Manifest V3) for reading PDFs with pages that turn like paper. *Mekuri* (めくり) is Japanese for "turning over" a page.
 
+![Dragging a page across the book](docs/screenshots/page-turn.gif)
+
+## Screenshots
+
+| | |
+| --- | --- |
+| ![Two-page book view](docs/screenshots/book-view.png)<br>**Book view**: two-page spread of the built-in sample booklet. | ![Toolbar over the sample booklet's cover](docs/screenshots/toolbar.png)<br>**Toolbar**: slides in when the pointer reaches the top edge. |
+| ![Highlights and pen marks on a PDF](docs/screenshots/annotations.png)<br>**Highlight and draw** on any PDF, then save a copy with the marks. | ![Find bar with matches highlighted](docs/screenshots/find.png)<br>**Find** across the whole document. |
+| ![Continuous scroll view](docs/screenshots/scroll-view.png)<br>**Scroll view** for ordinary vertical reading. | |
+
+The sample text in the screenshots is from *Alice's Adventures in Wonderland* by Lewis Carroll (public domain).
+
 ## Features
 
 - **Book view**: drag a page corner, or click a page, to turn it. Rendered in WebGL with an adjustable curl and turn speed.
@@ -43,6 +55,7 @@ A Chromium browser extension (Manifest V3) for reading PDFs with pages that turn
 | `reader.html` / `reader.css` | Reader page and toolbar. |
 | `reader.js` | The whole reader: WebGL page-curl renderer, PDF.js page rendering into textures, book and scroll views, find, annotations, saving and preferences. |
 | `pdf.min.js`, `pdf.worker.min.js`, `cmaps/`, `standard_fonts/` | Bundled [PDF.js](https://mozilla.github.io/pdf.js/) 3.11.174 (Apache-2.0, see `pdfjs-LICENSE.txt`). |
+| `docs/screenshots/` | Images used in this README. Not used by the extension. |
 | `pdf-lib.min.js` | Bundled [pdf-lib](https://pdf-lib.js.org/) (MIT, see `pdf-lib-LICENSE.md`), used only to write marks into a saved copy. |
 
 ### Design decisions
@@ -59,4 +72,4 @@ A Chromium browser extension (Manifest V3) for reading PDFs with pages that turn
 
 ## Licence
 
-The bundled third-party libraries keep their own licences (see above).
+[MIT](LICENSE). The bundled third-party libraries keep their own licences: PDF.js is Apache-2.0 and pdf-lib is MIT. See `pdfjs-LICENSE.txt`, `pdf-lib-LICENSE.md` and `standard_fonts/LICENSE_*`.
